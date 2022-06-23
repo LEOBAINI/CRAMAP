@@ -38,6 +38,7 @@
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
 	let lat_lng;
+	var circle;
 	var marker;
 	bounds = L.latLngBounds();
 	var customIcon = new L.Icon({
@@ -49,13 +50,37 @@
 	
 	$instanciaSql=new miconexion();
 	
+	
 	$row=$instanciaSql->obtenerDatos(settings::getFicheroRealTime());
-	//conectardb();
+	$row2=$instanciaSql->obtenerDatos(settings::getFicheroHistorico());
+	
+	dibujarPuntos($row);
+	dibujarCirculos($row2);
+
+	?>
+	
+	
+	map.fitBounds(bounds)
+	
+
+	 	function actualizar(){location.reload(true);}
+
+		setInterval("actualizar()",
+		<?php echo settings::getTiempoRefreshMapa();?>);
+
+
+
+</script>
+<div id="info">
+<?php
+echo "ALARMAS EN CURSO : ".count($row);
+
+function dibujarPuntos($row){
 
 	
 	foreach($row as $fila) {
 		
-		echo 'lat_lng = ['.$fila["longitude"].','.$fila["latitude"].'];';
+		echo 'lat_lng = ['.$fila["latitude"].','.$fila["longitude"].'];';
 		echo "\n";
 		echo 'L.marker(lat_lng,{icon: customIcon}).addTo(map).bindPopup("'
 
@@ -76,24 +101,19 @@
 		echo 'bounds.extend(lat_lng)';
 		echo "\n";
 	}
-	?>
-	
-	
-	map.fitBounds(bounds)
-	
+}
 
-	 	function actualizar(){location.reload(true);}
-
-		setInterval("actualizar()",
-		<?php echo settings::getTiempoRefreshMapa();
-		?>);
-
-
-
-</script>
-<div id="info">
-<?php
-echo "ALARMAS EN CURSO : ".count($row);
+function dibujarCirculos($row){
+	foreach($row as $fila) {
+	 echo   'circle=L.circle(['.$fila["latitude"].','.$fila["longitude"].'], {';
+	 echo	'color: "blue",';
+	 echo	'fillColor: "#f03",';
+	 echo	'fillOpacity: 0.1,';
+	 echo 	'radius: 1500';
+	 echo	'}).addTo(map);';
+	 echo "\n";
+	}
+}
 ?>
 <img src = 'prosegur.png' width="35" height="35" id="logo" />
 </div>
