@@ -4,276 +4,22 @@
 }
   
 
-
-/* Made with love by Mutiullah Samim*/
-
-@import url('https://fonts.googleapis.com/css?family=Numans');
-
 html,body{
 
 height: 100%;
-font-family: 'Numans', sans-serif;
-}
+width: 100%;
 
-.container{
-height: 100%;
-align-content: center;
-}
-
-.card{
-height: 370px;
-margin-top: auto;
-margin-bottom: auto;
-width: 400px;
-background-color: rgba(0,0,0,0.5) !important;
-}
-
-.social_icon span{
-font-size: 60px;
-margin-left: 10px;
-color: #FFC312;
-}
-
-.social_icon span:hover{
-color: white;
-cursor: pointer;
-}
-
-.card-header h3{
-color: white;
-}
-
-.social_icon{
-position: absolute;
-right: 20px;
-top: -45px;
-}
-
-.input-group-prepend span{
-width: 50px;
-background-color: #FFC312;
-color: black;
-border:0 !important;
-}
-
-input:focus{
-outline: 0 0 0 0  !important;
-box-shadow: 0 0 0 0 !important;
 
 }
 
-.remember{
-color: white;
-}
 
-.remember input
-{
-width: 20px;
-height: 20px;
-margin-left: 15px;
-margin-right: 5px;
-}
-
-.login_btn{
-color: black;
-background-color: #FFC312;
-width: 100px;
-}
-
-.login_btn:hover{
-color: black;
-background-color: white;
-}
-
-.links{
-color: white;
-}
-
-.links a{
-margin-left: 4px;
-}
-
-  /************************************/
-    p{
-     text-align:center;
-    }
-
-    .login-form {
-    width: 340px;
-      margin: 50px auto;
-      border: 2px black;
-    }
-    .login-form form {
-      margin-bottom: 15px;
-        background: #f7f7f7;
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        padding: 30px;
-    }
-    .login-form h2 {
-        margin: 0 0 15px;
-        text-align: center;
-        text-shadow:  0.3em 0.3em 0.5em black;
-       
-    }
-    .form-control, .btn {
-        min-height: 38px;
-        border-radius: 2px;
-    }
-    .btn {        
-        font-size: 15px;
-        font-weight: bold;
-    }
-    .salir{
-        display: flex;
-        justify-content: space-between; 
-        margin-right: 20px;  
-        color:black;
-        
-        
-    }
-    .tituloCentrado{
-        display: flex;
-        justify-content: center;
-        color: black;
-       
-       
-    }
-    .etiquetaBlanca{
-        color: black;
-    }
-    .paginacionCentrada{
-        display: flex;
-        justify-content: center;
-    }
-
-
-   
-h1{
-    
-    color: white;
-    text-shadow:  0.3em 0.3em 0.5em black;
-    position: absolute;
-    top: 100px;
-    
-    text-align: center;
-}
-
-
-video {
- /* position: absolute;
-  z-index: -1;
-  
-  left: 50%; top: 50%;
-  transform: translate(-50%, -50%);*/
-  z-index: -1;
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  
-  min-width: 100%; 
-  min-height: 100%;
-
-  
-}
-.imagenDeFondo{
-  z-index: -1;
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 100%;
-  height: 100%;
-}
-#container .table{
-  color:black;
-  
-}
-#container p{
-  color:black;
-  
-}
-td{
-  color:black;
-  font-size: 11px;
-  
-}
-th{
-  color:black;
-  font-size: 13px;
-  
-}
-
-#sistemas{
- 
- height:640px;
- width: 100%;
- border:2px;
- 
-  
-}
-#infoscan {
-    height: 6%;
+#map{
     width: 100%;
-    font-size: 12px;
-    color: yellow;
-    position: relative;
-    bottom: 0px;
-    background-color: grey;
-}
- .tabla {
-    height: 80%;
-    max-height: 80%;
-    overflow-y: auto;
-   
-    }
-
-   .paginacionCentrada2 {
-    height: 10%;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    position: relative;
-    bottom: 0px;
-    background-color: black;
-    padding: 10px;
-}
-
-.infoproblema{
-  font-size: 12px;
-  color: red;
- 
-  }
-
-
- 
-  
-
-   .color-verde td{
-    color:green;
-    }
-    .color-rojo td{
-    color:red;
-    }
-
-   
-    .header2 {
-    height: 90px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    z-index: 200;
-}
-   
-   #mapaRecargado{
-    height: 95%;
-    width: 100%;
+    height: 97%;
      }
-     #mapid{
-     width: 100%;
-     height: 100%;
-     }
+
  #info{
-    height: 5%;
+    height: 3%;
     width: 100%;
     background-color: #ffd203;
     font-style: italic;
@@ -281,7 +27,12 @@ th{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: xx-large;
+    font-size: small;
    
  }    
+ #logo{
+    height: 20px;
+    width: 20px;
+ }
+  
  
