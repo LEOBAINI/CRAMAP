@@ -21,7 +21,7 @@
 </head>
 <body>
 
-<div id="map" style="width: 100%; height: 99%;"></div>
+<div id="map" ></div>
 
 
 <script>
@@ -32,11 +32,11 @@
 		 ?>
 		], 30);
 	//map.invalidateSize(true);
-
 	var tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 20,
+		maxZoom: 18,
 		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 	}).addTo(map);
+	
 	let lat_lng;
 	var circle;
 	var marker;
@@ -45,16 +45,22 @@
   	iconUrl: 'police-siren-siren.gif',
   	iconSize: [10, 10],
   	iconAnchor: [10, 10]
+}); 
+
+	var moto = new L.Icon({
+  	iconUrl: 'moto.jpg',
+  	iconSize: [30, 30],
+  	iconAnchor: [30, 30]
 });
 	<?php
 	
 	$instanciaSql=new miconexion();
 	
 	
-	$row=$instanciaSql->obtenerDatos(settings::getFicheroRealTime());
+	$row=$instanciaSql->obtenerDatos(settings::getFicheroRealTime());	
+	$motos=dibujarPuntos($row);
+
 	$row2=$instanciaSql->obtenerDatos(settings::getFicheroHistorico());
-	
-	dibujarPuntos($row);
 	dibujarCirculos($row2);
 
 	?>
@@ -73,16 +79,24 @@
 </script>
 <div id="info">
 <?php
-echo "ALARMAS EN CURSO : ".count($row);
+echo "ALARMAS EN CURSO : ".count($row)." || JOBS ABIERTOS : ".$motos." || HISTÓRICO : ".count($row2);
 
 function dibujarPuntos($row){
-
+	$motos=0;
 	
 	foreach($row as $fila) {
 		
 		echo 'lat_lng = ['.$fila["latitude"].','.$fila["longitude"].'];';
 		echo "\n";
-		echo 'L.marker(lat_lng,{icon: customIcon}).addTo(map).bindPopup("'
+		echo 'L.marker(lat_lng,{icon:'; 
+		if($fila["job_no"]==''){
+			echo	'customIcon';
+		}else{
+			echo	'moto';
+			$motos=$motos+1;
+		}
+		
+		echo '}).addTo(map).bindPopup("'
 
 		.'descr:'.$fila["descr"].'<br>'
 		.'contrato:'.$fila["contrato"].'<br>'
@@ -101,21 +115,22 @@ function dibujarPuntos($row){
 		echo 'bounds.extend(lat_lng)';
 		echo "\n";
 	}
+	return $motos;
 }
 
 function dibujarCirculos($row){
 	foreach($row as $fila) {
 	 echo   'circle=L.circle(['.$fila["latitude"].','.$fila["longitude"].'], {';
 	 echo	'color: "blue",';
-	 echo	'fillColor: "#f03",';
-	 echo	'fillOpacity: 0.1,';
-	 echo 	'radius: 1500';
+	// echo	'fillColor: "#f03",';
+	 echo	'fillOpacity: 0.01,';
+	 echo 	'radius: 10';
 	 echo	'}).addTo(map);';
 	 echo "\n";
 	}
 }
 ?>
-<img src = 'prosegur.png' width="35" height="35" id="logo" />
+<img id="logo" src = 'prosegur.png' />
 </div>
 
 </body>
