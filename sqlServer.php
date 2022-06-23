@@ -7,7 +7,7 @@ class miconexion {
 */
 public function obtenerDatos($ficheroQuery){
 	//include 'settings.php';	
-	include "lectorFichero.php";
+	include_once "lectorFichero.php";
 	
 	$instanciaFichero=new lectorFichero();
 	$contenidoFichero=$instanciaFichero->leerFichero($ficheroQuery);
