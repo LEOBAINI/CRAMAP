@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<META HTTP-EQUIV="REFRESH" CONTENT="10;URL=inicio.php">
-	<title>Error</title>
+	<title>Error 2</title>
 </head>
 <body>
 <?php
