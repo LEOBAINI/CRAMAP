@@ -14,6 +14,7 @@
 	 <link rel="stylesheet"  type = "text/css" href="css/estilos.css">
 	 <script src="js/leaflet.js"></script>	
 	 <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+	 <link rel="icon" href="prosegur.png">
   
 	<title>GEOALARMAS 1.0</title>
 
@@ -40,16 +41,17 @@
 	let lat_lng;
 	var circle;
 	var marker;
+	var marker2;
 	bounds = L.latLngBounds();
 	var customIcon = new L.Icon({
-  	iconUrl: 'police-siren-siren.gif',
-  	iconSize: [10, 10],
+  	iconUrl: 'police-siren-siren.gif',//police-siren-siren.gif',
+  	iconSize: [11, 11],
   	iconAnchor: [10, 10]
 }); 
 
 	var moto = new L.Icon({
   	iconUrl: 'moto.jpg',
-  	iconSize: [30, 30],
+  	iconSize: [50, 50],
   	iconAnchor: [30, 30]
 });
 	<?php
@@ -58,10 +60,13 @@
 	
 	
 	$row=$instanciaSql->obtenerDatos(settings::getFicheroRealTime());	
+	//dibujarMarcadores($row);
 	$motos=dibujarPuntos($row);
 
 	$row2=$instanciaSql->obtenerDatos(settings::getFicheroHistorico());
 	dibujarCirculos($row2);
+	
+	//dibujarMarcadores($row2);
 
 	?>
 	
@@ -79,7 +84,7 @@
 </script>
 <div id="info">
 <?php
-echo "ALARMAS EN CURSO : ".count($row)." || JOBS ABIERTOS : ".$motos." || HISTÓRICO : ".count($row2);
+echo "ALARMAS EN CURSO : ".count($row)." || JOBS ABIERTOS : ".$motos." || HISTÓRICO ULTIMAS 2 HORAS: ".count($row2);
 
 function dibujarPuntos($row){
 	$motos=0;
@@ -112,6 +117,7 @@ function dibujarPuntos($row){
 
 		echo '});';
 		echo "\n";
+		
 		echo 'bounds.extend(lat_lng)';
 		echo "\n";
 	}
@@ -121,10 +127,22 @@ function dibujarPuntos($row){
 function dibujarCirculos($row){
 	foreach($row as $fila) {
 	 echo   'circle=L.circle(['.$fila["latitude"].','.$fila["longitude"].'], {';
-	 echo	'color: "blue",';
+	 echo	'color: "orange",';
+	 echo	'fillColor: "orange",';
+	 echo	'fillOpacity: 0.2,';
+	 echo 	'radius: 600';
+	 echo	'}).addTo(map);';
+	 
+	 echo "\n";
+	}
+}
+function dibujarMarcadores($row){//L.marker([51.5, -0.09]).addTo(map)
+foreach($row as $fila) {
+	 echo   'marker2=L.marker(['.$fila["latitude"].','.$fila["longitude"].'], {';
+	 echo	'color: "orange",';
 	// echo	'fillColor: "#f03",';
 	 echo	'fillOpacity: 0.01,';
-	 echo 	'radius: 10';
+	 echo 	'radius: 60';
 	 echo	'}).addTo(map);';
 	 echo "\n";
 	}
@@ -132,6 +150,8 @@ function dibujarCirculos($row){
 ?>
 <img id="logo" src = 'prosegur.png' />
 </div>
+<script>
 
+</script>
 </body>
 </html>

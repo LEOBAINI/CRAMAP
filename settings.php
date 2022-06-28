@@ -3,16 +3,18 @@
 class settings{
 
 //*****************************************Settings*****************************************
-const  tiempoRefreshMapa='30000';//(Milisegundos)
-const  latLongitudInicial='40.401194, -3.671306';// buscar un punto del pais desde google maps
-const  autoClose='true';
+const  tiempoRefreshMapa='120000';//(Milisegundos)
+const  latLongitudInicial='-34.596352, -58.484019';// buscar un punto del pais desde google maps
+const  autoClose='false';
 const  serverIP='xxxx';
-const  portdb='xxxccccccc0000000000';
-const  userdb='xxx';
-const  passdb='xxxxxx';
-const  database='xxxx';
-const  ficheroRealtime='xxxx';
-const  ficheroHistorico='xxxx';
+const  portdb='xxx';
+const  userdb='xx';
+const  passdb='xxx';
+const  database='xx';
+const  ficheroRealtime='C:\xampp\Queries\ALarmasBufer.sql';
+const  ficheroHistorico='C:\xampp\Queries\incidentes2.sql';
+const  tiempoConsultaficheroRealtime=60; // segundos que se refrescará el json que lee el mapa
+const  tiempoConsultaficheroHistorico=1800; // segundos que se refrescará el json histórico que lee el mapa
 
 //*****************************************Settings*****************************************
 
