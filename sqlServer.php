@@ -52,13 +52,13 @@ return $resultados;
 
 
 public function obtenerDatosAJson($ficheroQuery,$nombreFichero){
-    //include 'settings.php';   
+   set_time_limit(300);
     include_once "lectorFichero.php";
     
     $instanciaFichero=new lectorFichero();
     $contenidoFichero=$instanciaFichero->leerFichero($ficheroQuery);
     $serverName = settings::getServerIp().','. settings::getPortDb(); //serverName\instanceName, portNumber (por defecto es 1433)
-    $connectionInfo = array( "Database"=>settings::getDataBase(), "UID"=>settings::getUserDb(), "PWD"=>settings::getPassDb());
+    $connectionInfo = array( "Database"=>settings::getDataBase(), "UID"=>settings::getUserDb(), "PWD"=>settings::getPassDb(),"CharacterSet" => "UTF-8");// muy importante el charset para luego decodificar, sino falla json encode
     try{
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 }catch(Exception $e){
@@ -86,16 +86,22 @@ if($result === false) {
     die(print_r(sqlsrv_errors(), true));
 }else{
 
-    
+ $i=0;   
 while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-  
+
+    
+
    $resultados[]=$row;
+   
+  
+  
 }
 sqlsrv_free_stmt($result);  
 sqlsrv_close($conn);
 }
-//return $resultados;
+
 $CODIFICADO=json_encode(['INFO' => $resultados]);
+
 file_put_contents($nombreFichero,$CODIFICADO);
 
 }

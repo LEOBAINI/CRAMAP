@@ -1,3 +1,4 @@
+
 <?php
 
 class settings{
@@ -6,15 +7,20 @@ class settings{
 const  tiempoRefreshMapa='120000';//(Milisegundos)
 const  latLongitudInicial='-34.596352, -58.484019';// buscar un punto del pais desde google maps
 const  autoClose='false';
-const  serverIP='xxxx';
+const  serverIP='xxxxx';
 const  portdb='xxx';
-const  userdb='xx';
+const  userdb='xxx';
 const  passdb='xxx';
-const  database='xx';
+const  database='xxx';
 const  ficheroRealtime='C:\xampp\Queries\ALarmasBufer.sql';
-const  ficheroHistorico='C:\xampp\Queries\incidentes2.sql';
+const  ficheroHistorico='C:\xampp\Queries\incidentesDia.sql';
 const  tiempoConsultaficheroRealtime=60; // segundos que se refrescará el json que lee el mapa
 const  tiempoConsultaficheroHistorico=1800; // segundos que se refrescará el json histórico que lee el mapa
+const  colorCirculoHistorico1='#FF33F0'; //Color en ingles
+const  tamanioCirculoHistorico1=6000; // es el radio del circulo
+const  etiquetaJobsAbiertos='Acudas en movimiento';
+const  etiquetaHistoricos='HISTÓRICO ULTIMAS X HORAS';
+const  etiquetaAlarmasRealTime='Alarmas en Curso';
 
 //*****************************************Settings*****************************************
 
