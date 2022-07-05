@@ -3,7 +3,10 @@
 	include 'settings.php';	
 	include "sqlServer.php";
 	include 'funcionesEspeciales.php';
-	include 'extractor.php';
+	require_once "validaUsuario.php";
+	$ficheroCacheHistorico=settings::ficheroCacheHistorico;
+	$ficheroCacheRealTime=settings::ficheroCacheRealTime;
+	
 ?>	
 <!DOCTYPE html>
 <html lang="es">
@@ -47,60 +50,80 @@
 	bounds = L.latLngBounds();
 	var iconoAlarmaTiempoReal = new L.Icon({
   	iconUrl: 'police-siren-siren.gif',//police-siren-siren.gif',
-  	iconSize: [11, 11],
-  	iconAnchor: [10, 10]
+  	iconSize: [20, 20],
+  	iconAnchor: [20, 20]
 }); 
 
 	var iconoDeMoto = new L.Icon({
-  	iconUrl: 'moto.jpg',
-  	iconSize: [50, 50],
+  	iconUrl: 'motos-gif-fazendo-curva.gif',
+  	iconSize: [60, 60],
   	iconAnchor: [30, 30]
 });
 	<?php
 
-	recargarHistorico();
+	
 
 	
-	$instanciaSql=new miconexion();
-	
-	
-	$arrayAsociativoAlarmasTiempoReal=$instanciaSql->obtenerDatos(settings::getFicheroRealTime());	
+	$motos=0;
+	$arrayAsociativoAlarmasTiempoReal=array();
+
+	if (file_exists($ficheroCacheRealTime)) {
+	$arrayAsociativoAlarmasTiempoReal=leerArchivoJson($ficheroCacheRealTime,'INFO');
 	
 	$motos=dibujarPuntos($arrayAsociativoAlarmasTiempoReal);
-
-	$arrayAsociativoAlarmasHistorico=leerArchivoJson('eventohis.json','INFO');//$instanciaSql->obtenerDatos(settings::getFicheroHistorico());
+}else{
+	recargarFicheroRealTimeAsync();
+	
+	
+}
 
 	
 
+	$arrayAsociativoAlarmasHistorico=array();
+
+	
+	if (file_exists($ficheroCacheHistorico)) {
+	$arrayAsociativoAlarmasHistorico=leerArchivoJson($ficheroCacheHistorico,'INFO');//$instanciaSql->obtenerDatos(
+
+	
 	dibujarCirculos(
 		$arrayAsociativoAlarmasHistorico,
-		settings::colorCirculoHistorico1,
 		settings::tamanioCirculoHistorico1
 	);
+}
 	?>
 	
 	
 	map.fitBounds(bounds)// hace que el mapa se acomode para que se visualicen todos los marcadores
 	
 
-	 	function actualizar(){location.reload(true);}
+	 
 
-		setInterval("actualizar()",
-		<?php echo settings::getTiempoRefreshMapa();?>);
+	
 
 
 
 </script>
+
 <div id="info">
 <?php
 mostrarEtiquetaInformativa($arrayAsociativoAlarmasTiempoReal,$motos,$arrayAsociativoAlarmasHistorico);
-echo "<br>";
-//echo antiguedadArchivo('eventohis.json');
 ?>
+<div id="info2"></div>
 <img id="logo" src = 'prosegur.png' />
+
 </div>
 <script>
 
+
+$(document).ready(function() {
+      var refreshId =  setInterval( function(){
+    $('#info2').load('info.php');//actualizas el div
+   }, 1000 );
+});
+
+
+
 </script>
-</body>
+
 </html>

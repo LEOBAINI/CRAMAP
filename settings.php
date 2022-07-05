@@ -4,23 +4,26 @@
 class settings{
 
 //*****************************************Settings*****************************************
-const  tiempoRefreshMapa='120000';//(Milisegundos)
+//const  tiempoRefreshMapa=60*5;//(Segundos)
 const  latLongitudInicial='-34.596352, -58.484019';// buscar un punto del pais desde google maps
 const  autoClose='false';
-const  serverIP='xxxxx';
-const  portdb='xxx';
-const  userdb='xxx';
-const  passdb='xxx';
-const  database='xxx';
+const  serverIP='10.54.118.60';
+const  portdb='1433';
+const  userdb='sa';
+const  passdb='anaconda1';
+const  database='monitordb';
 const  ficheroRealtime='C:\xampp\Queries\ALarmasBufer.sql';
-const  ficheroHistorico='C:\xampp\Queries\incidentesDia.sql';
-const  tiempoConsultaficheroRealtime=60; // segundos que se refrescará el json que lee el mapa
-const  tiempoConsultaficheroHistorico=1800; // segundos que se refrescará el json histórico que lee el mapa
-const  colorCirculoHistorico1='#FF33F0'; //Color en ingles
-const  tamanioCirculoHistorico1=6000; // es el radio del circulo
-const  etiquetaJobsAbiertos='Acudas en movimiento';
-const  etiquetaHistoricos='HISTÓRICO ULTIMAS X HORAS';
-const  etiquetaAlarmasRealTime='Alarmas en Curso';
+const  ficheroHistorico='C:\xampp\Queries\utimas2hs.sql';//incidentesDia.sql';
+const  tiempoConsultaficheroRealtime=60*5; // segundos que se refrescará el json que lee el mapa
+const  tiempoConsultaficheroHistorico=60*60*12; // segundos que se refrescará el json histórico que lee el mapa
+const  tamanioCirculoHistorico1=10; // es el radio del circulo
+const  etiquetaJobsAbiertos='ACUDAS EN MOVIMIENTO';
+const  etiquetaHistoricos='HISTÓRICO ULTIMAS 24 HORAS';
+const  etiquetaAlarmasRealTime='ALARMAS EN TIEMPO REAL';
+const  ficheroCacheHistorico='eventohistorico.json';
+const  ficheroCacheRealTime='eventosRealTime.json';
+const  username='alarmas';// para el login inicial
+const  password='dtialarmas'; //para el login inicial
 
 //*****************************************Settings*****************************************
 

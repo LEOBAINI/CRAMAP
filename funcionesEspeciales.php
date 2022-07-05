@@ -1,4 +1,5 @@
 <?php
+include_once "sqlServer.php";
 
 /*
 Devuelve la antiguedad en segundos de un archivo determinado.
@@ -15,20 +16,36 @@ Lo hace restando el timestamp de creación, vs la hora actual.
 Recibe un array asociativo que debe contener las palabras latitude y longitude para poder dibujar.
 El color y ancho, se manejan desde el archivo settings.php
 */
- function dibujarCirculos($row,$color,$radius){
+
+ function dibujarCirculos($row,$radius){
     if(!empty($row)){
     foreach($row as $fila) {
+      if($fila["latitude"]!=null && $fila["longitude"]!=null){
+
+     
      echo   'circle=L.circle(['.$fila["latitude"].','.$fila["longitude"].'], {';
-     echo   'color: "'.$color.'",';
-     echo   'fillColor: "'.$color.'",';
+     echo   'color: "'.$fila["color"].'",';
+     echo   'fillColor: "'.$fila["color"].'",';
      echo   'fillOpacity: 0.2,';
      echo   'radius: '.$radius;
-     echo   '}).addTo(map);';
+     echo   '}).addTo(map).bindPopup("'
+
+        .'contrato:'.$fila["contrato"].'<br>'
+      //  .'site_name:'.$fila["site_name"].'<br>'
+        .'latitude:'.$fila["latitude"].'<br>'
+        .'longitude:'.$fila["longitude"].'<br>'  
+        .'date:'.$fila["alarm_server_date"]["date"].'<br>' 
+        .'antiguedad:'.calcularAntiguedadMinutos($fila["alarm_server_date"]["date"]).'<br>'
+        
+        .'");';
      
      echo "\n";
     }
+} 
 }
 }
+
+
 function dibujarMarcadores($row){//L.marker([51.5, -0.09]).addTo(map)
 foreach($row as $fila) {
      echo   'marker2=L.marker(['.$fila["latitude"].','.$fila["longitude"].'], {';
@@ -53,6 +70,8 @@ function mostrarEtiquetaInformativa($cantidadAlarmasRealTime,$cantidadJobsAbiert
     .settings::etiquetaJobsAbiertos." : ".
     $cantidadJobsAbiertos." || "
     .settings::etiquetaHistoricos." : ".count($cantidadHistoricos);
+     
+     echo '<div id="salir"><a href="salir.php">SALIR</a></div>';
     }
     
 /*
@@ -108,20 +127,176 @@ function leerArchivoJson($rutaAlArchivo,$NombreIndex){
     $eventos = $decoded_json[$NombreIndex];
     return $eventos;
 }
-function recargarHistorico(){
-        if (file_exists('eventohis.json')) {
+/*function recargarHistorico(){
+    $ficheroHistorico=settings::ficheroCacheHistorico;
+        if (file_exists($ficheroHistorico)) {
 
-            if(antiguedadArchivo('eventohis.json')>60*30){// cada 30 minutos
-              recargarJson('eventohis.json');
+            if(antiguedadArchivo($ficheroHistorico)>settings::tiempoConsultaficheroHistorico){// cada 30 minutos
+              recargarJson(settings::getFicheroHistorico(),$ficheroHistorico);
              }
         }else{// si no existe, crear
 
-             recargarJson('eventohis.json');
+             recargarJson(settings::getFicheroHistorico(),$ficheroHistorico);
+        }
+}*/
+
+function recargarFicheroRealtime(){
+    
+    $ficheroCacheRealTime=settings::ficheroCacheRealTime;
+    if(file_exists($ficheroCacheRealTime)){
+
+         if(antiguedadArchivo($ficheroCacheRealTime)>settings::tiempoConsultaficheroRealtime){
+            
+            recargarJson(settings::getFicheroRealTime(),$ficheroCacheRealTime);
+           
+        }// fin si supera la antiguedad
+    }//fin si existe fichero
+
+    else{
+           
+            recargarJson(settings::getFicheroRealTime(),$ficheroCacheRealTime);
         }
 }
-function recargarJson($archivo){
+
+function recargarFicheroRealTimeAsync(){
+   $cmd='php async.php realtime';
+  
+
+    $ficheroCacheRealTime=settings::ficheroCacheRealTime;
+    if(file_exists($ficheroCacheRealTime)){
+
+         if(antiguedadArchivo($ficheroCacheRealTime)>settings::tiempoConsultaficheroRealtime){
+            
+           
+          exec($cmd);
+           
+        }// fin si supera la antiguedad
+    }//fin si existe fichero
+
+    else{
+           
+         
+          exec($cmd);
+
+
+        }
+    
+
+
+}
+
+function recargarFicheroHistoricoAsync(){
+   $cmd='start /b historico.bat';//'php async.php historico';
+   
+
+    $ficheroCacheHistorico=settings::ficheroCacheHistorico;
+    if(file_exists($ficheroCacheHistorico)){
+
+         if(antiguedadArchivo($ficheroCacheHistorico)>settings::tiempoConsultaficheroHistorico){
+            
+           copy($ficheroCacheHistorico, 'historico.tmp');
+           unlink($ficheroCacheHistorico);
+           copy('historico.tmp', $ficheroCacheHistorico);
+           unlink('historico.tmp');
+           exec($cmd);
+           
+           
+        }// fin si supera la antiguedad
+    }//fin si existe fichero
+
+    else{
+           
+         
+           exec($cmd);
+
+
+        }
+    
+
+
+}
+
+/*
+Obtiene un query, y un archivo destino donde escribir.
+*/
+function recargarJson($ficheroQuery,$archivoDestino){
     $instanciaSqlServer=new  miconexion();
-    $instanciaSqlServer->obtenerDatosAJson(settings::getFicheroHistorico(),$archivo);
+    $instanciaSqlServer->obtenerDatosAJson($ficheroQuery,$archivoDestino);
+}
+
+
+function escribir_consola($data) {
+ $console = $data;
+ if (is_array($console))
+ $console = implode(',', $console);
+
+ echo "console.log('Console: " . $console . "' );";
+}
+function escribirLog($archivo,$texto){
+    $fp = fopen($archivo, 'a');//opens file in append mode  
+    fwrite($fp, $texto);  
+    fclose($fp);  
+}
+
+
+function calcularAntiguedadSegundos($fecha){
+    $fechaTime=strtotime($fecha);
+    return time()-$fechaTime;
+
+}
+function calcularAntiguedadMinutos($fecha){
+    
+    return calcularAntiguedadSegundos($fecha)/60;
+
+}
+
+
+
+ function obtenerDatosAJson($ficheroQuery,$nombreFichero){
+    set_time_limit(13000);
+  //  exec("doTask.php $arg1 $arg2 $arg3 >/dev/null 2>&1 &");
+
+
+    include_once "lectorFichero.php";
+    $instanciaSqlServer=new miconexion();
+    $conn=$instanciaSqlServer->conectar();
+
+    $instanciaFichero=new lectorFichero();
+    $contenidoFichero=$instanciaFichero->leerFichero($ficheroQuery);
+ 
+    $megaArray=array();
+    $sql = $contenidoFichero;//"SELECT top 10 site_no,system_no from system";
+
+    $result = sqlsrv_query($conn, $sql);
+
+    if($result === false) {
+    die(print_r(sqlsrv_errors(), true));
+    }else{
+
+    $i=0;   
+    while($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+
+    
+
+   $resultados[]=$row;
+   
+  
+  
+}
+sqlsrv_free_stmt($result);  
+sqlsrv_close($conn);
+}
+
+$CODIFICADO=json_encode(['INFO' => $resultados]);
+$CODIFICADO=str_replace('\\"',"",$CODIFICADO);//Quitar los strings que tienen contrabarra y comillas dobles..
+
+//!empty($arreglo);
+if($CODIFICADO!='{"INFO":null}'){
+file_put_contents($nombreFichero,$CODIFICADO);
+}else{
+    file_put_contents('Errores.log',$resultados);
+}
+
 }
 
  ?>
